@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hinlok.aircorgi2.mapper.AirportInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hinlok.aircorgi2.model.AirportInfo">
+    <result column="airport_iata" jdbcType="VARCHAR" property="airportIata" />
+    <result column="airport_name" jdbcType="VARCHAR" property="airportName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    airport_iata, airport_name
+  </sql>
+
+  <select id="selectDepAirportInfo" resultType="java.lang.String">
+    select
+    airport_name
+    from
+    airport_info
+    where
+    airport_iata='${departure}'
+  </select>
+
+  <select id="selectDesAirportInfo" resultType="java.lang.String">
+    select
+    airport_name
+    from
+    airport_info
+    where
+    airport_iata='${destination}'
+  </select>
+
+  <insert id="insert" parameterType="com.hinlok.aircorgi2.model.AirportInfo">
+    insert into airport_info (airport_iata, airport_name)
+    values (#{airportIata,jdbcType=VARCHAR}, #{airportName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hinlok.aircorgi2.model.AirportInfo">
+    insert into airport_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="airportIata != null">
+        airport_iata,
+      </if>
+      <if test="airportName != null">
+        airport_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="airportIata != null">
+        #{airportIata,jdbcType=VARCHAR},
+      </if>
+      <if test="airportName != null">
+        #{airportName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hinlok.aircorgi2.mapper.PassengerInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hinlok.aircorgi2.model.PassengerInfo">
+    <result column="passenger_id" jdbcType="VARCHAR" property="passengerId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="passenger_name" jdbcType="VARCHAR" property="passengerName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    passenger_id, user_id, passenger_name
+  </sql>
+
+  <select id="selectNameById" resultType="java.lang.String">
+    select
+    passenger_name
+    from
+    passenger_info
+    where
+    passenger_id=#{passengerId}
+  </select>
+
+  <insert id="insertPassenger">
+    insert into passenger_info (passenger_id, user_id, passenger_name
+      )
+    values (#{passengerInfo.passengerId,jdbcType=VARCHAR}, #{passengerInfo.userId,jdbcType=VARCHAR}, #{passengerInfo.passengerName,jdbcType=VARCHAR}
+      )
+  </insert>
+
+
+  <select id="selectAllPassenger" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from
+    passenger_info
+    where
+    user_id = #{userId}
+  </select>
+
+  <insert id="insert" parameterType="com.hinlok.aircorgi2.model.PassengerInfo">
+    insert into passenger_info (passenger_id, user_id, passenger_name
+      )
+    values (#{passengerId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{passengerName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hinlok.aircorgi2.model.PassengerInfo">
+    insert into passenger_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="passengerId != null">
+        passenger_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="passengerName != null">
+        passenger_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="passengerId != null">
+        #{passengerId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="passengerName != null">
+        #{passengerName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

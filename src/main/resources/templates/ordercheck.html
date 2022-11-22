@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}" href="../static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" th:href="@{/css/fontAwesome.css}" href="../static/css/fontAwesome.css">
+    <link rel="stylesheet" th:href="@{/css/hero-slider.css}" href="../static/css/hero-slider.css">
+    <link rel="stylesheet" th:href="@{/css/owl-carousel.css}" href="../static/css/owl-carousel.css">
+    <link rel="stylesheet" th:href="@{/css/datepicker.css}" href="../static/css/datepicker.css">
+    <link rel="stylesheet" th:href="@{/css/tooplate-style.css}" href="../static/css/tooplate-style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <script th:src="@{/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js}" src="../static/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <title>确认您的行程 — Air Corgi 柯基航空公司</title>
+    <link rel="stylesheet" th:href="@{/css/customize.css}" href="../static/css/customize.css">
+</head>
+<body>
+
+<section style="margin-top: 20px">
+
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Air Corgi 柯基航空</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav" style="float: right;">
+                    <li class="dropdown" th:if="${userId}!=null">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <b th:text="${userId}"></b>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/orderList">订单管理</a></li>
+                            <li><a href="/toResetPassword">修改密码</a></li>
+                            <li><a href="/logout">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/toLogin" th:if="${userId}==null">登录</a></li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+</section>
+
+
+
+<section class="banner" id="top">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-1">
+                <section id="first-tab-group" class="tabgroup">
+                    <div id="tab1">
+                        <div class="submit-form">
+                            <h4 style="color: red">预订行程</h4>
+                            <form id="form-submit" th:action="@{/queryflight}" method="get">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <label>出发/From</label>
+                                            <select required oninvalid="setCustomValidity('请选择出发地');" oninput="setCustomValidity('')" name="departure">
+                                                <option value="">Select a location...</option>
+                                                <option value="CAN">广州/Guangzhou</option>
+                                                <option value="PEK">北京/Beijing</option>
+                                                <option value="SZX">深圳/Shenzhen</option>
+                                                <option value="NNG">南宁/Nanning</option>
+                                                <option value="CTU">成都/Chengdu</option>
+                                                <option value="WUH">武汉/Wuhan</option>
+                                                <option value="HGH">杭州/Hangzhou</option>
+                                                <option value="SHA">上海虹桥/Shanghai Hongqiao</option>
+                                                <option value="PVG">上海浦东/Shanghai Pudong</option>
+                                            </select>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <label>到达/To</label>
+                                            <select required oninvalid="setCustomValidity('请选择目的地');" oninput="setCustomValidity('')" name="destination">
+                                                <option value="">Select a location...</option>
+                                                <option value="CAN">广州/Guangzhou</option>
+                                                <option value="PEK">北京/Beijing</option>
+                                                <option value="SZX">深圳/Shenzhen</option>
+                                                <option value="NNG">南宁/Nanning</option>
+                                                <option value="CTU">成都/Chengdu</option>
+                                                <option value="WUH">武汉/Wuhan</option>
+                                                <option value="HGH">杭州/Hangzhou</option>
+                                                <option value="SHA">上海虹桥/Shanghai Hongqiao</option>
+                                                <option value="PVG">上海浦东/Shanghai Pudong</option>
+                                            </select>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <label>出发日期/Departure date</label>
+                                            <input name="depDate" type="text" class="form-control date" id="deparure" placeholder="Select date..." required="required" oninvalid="setCustomValidity('请选择出发日期');" oninput="setCustomValidity('')">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <label for="return">回程日期/Return date:</label>
+                                            <input name="re_date" type="text" class="form-control date" id="return" placeholder="Select date..." >
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-offset-6">
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <button type="submit" id="submit" class="btn">立即查询</button>
+                                            </fieldset>
+                                        </div></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="tabs-content" id="weather">
+    <div class="container">
+        <div class="row">
+            <br><br>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <h2>确认您的行程</h2>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="col-md-12">
+                    <div class="weather-content">
+                        <form th:action="@{/orderConfirm}" method="post">
+                            <div class="row">
+                                <div class="col-md-12" th:each="multiQueryResult:${multiQueryResult}">
+                                    <ul class="tabs clearfix" data-tabgroup="second-tab-group">
+                                        <li><a href="#monday" th:text="${multiQueryResult.flightNum}">航班确认</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-12">
+                                    <section id="second-tab-group" class="weathergroup">
+                                        <div id="monday">
+                                            <div class="row">
+                                                <div class="col-md-4" >
+                                                    <div class="weather-item" th:each="multiQueryResult:${multiQueryResult}">
+                                                        <h5 th:text="${multiQueryResult.depTime}">07:00</h5>
+                                                        <h6 th:text="${departureAirport}">广州白云国际机场</h6>
+                                                        <h4 th:text="${multiQueryResult.depDate}">2019-05-01</h4>
+                                                        <div class="weather-icon">
+                                                            <img src="../static/img/plane.png" th:src="@{/img/plane.png}" alt="">
+                                                        </div>
+                                                        <h5 th:text="${multiQueryResult.arrTime}">10:10</h5>
+                                                        <h6 th:text="${destinationAirport}">北京首都国际机场</h6>
+                                                        <h4 th:text="${multiQueryResult.depDate}">2019-05-01</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3" >
+                                                    <div class="weather-item" th:each="multiQueryResult:${multiQueryResult}">
+                                                        <div class="row">
+                                                            <div class="col-md-12" style="margin-top: 30px" >
+                                                                <h6>
+                                                                    <label>头等舱<b th:text="'  ￥'+${multiQueryResult.fclassPrice}">￥1000</b></label>
+                                                                    <input type="radio" name="seatType" value="fclass">
+                                                                </h6>
+                                                                <h6>&nbsp;</h6>
+                                                                <h6>&nbsp;</h6>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <h6>
+                                                                    <label>商务舱<b th:text="'  ￥'+${multiQueryResult.bclassPrice}">￥1000</b></label>
+                                                                    <input type="radio" name="seatType" value="bclass">
+                                                                </h6>
+                                                                <h6>&nbsp;</h6>
+                                                                <h6>&nbsp;</h6>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <h6>
+                                                                    <label>经济舱<b th:text="'  ￥'+${multiQueryResult.eclassPrice}">￥1000</b></label>
+                                                                    <input type="radio" name="seatType" value="eclass" checked>
+                                                                </h6>
+                                                                <h6>&nbsp;</h6>
+                                                                <h6>&nbsp;</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="weather-item">
+                                                        <div class="submit-form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <fieldset>
+                                                                        <label>乘机人1</label>
+                                                                        <select required oninvalid="setCustomValidity('请选择乘机人');" oninput="setCustomValidity('')" name="passenger1" >
+                                                                            <option value="">Select a passenger...</option>
+                                                                            <option th:each="passenger:${passenger}" th:value="${passenger.passengerId}" th:text="${passenger.passengerName}+'/'+${passenger.passengerId}"></option>
+                                                                        </select>
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <fieldset>
+                                                                        <label>乘机人2</label>
+                                                                        <select  name="passenger2">
+                                                                            <option value="">Select a passenger...</option>
+                                                                            <option th:each="passenger:${passenger}" th:value="${passenger.passengerId}" th:text="${passenger.passengerName}+'/'+${passenger.passengerId}"></option>
+                                                                        </select>
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <fieldset>
+                                                                        <label>乘机人3</label>
+                                                                        <select name="passenger3">
+                                                                            <option value="">Select a passenger...</option>
+                                                                            <option th:each="passenger:${passenger}" th:value="${passenger.passengerId}" th:text="${passenger.passengerName}+'/'+${passenger.passengerId}"></option>
+                                                                        </select>
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <fieldset>
+                                                                        <label><a type="button" data-toggle="modal" data-target="#myModal">添加新的乘机人</a></label>
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type=""  class="nextBtn" style="margin-top: 269px">重新选择<<</button>
+                                                    <div>
+                                                        <input type="hidden" name="depDate"  th:each="multiQueryResult:${multiQueryResult}" th:value="${multiQueryResult.depDate}">
+                                                        <input type="hidden" name="flightNum" th:each="multiQueryResult:${multiQueryResult}" th:value="${multiQueryResult.flightNum}">
+                                                        <button type="submit"  class="nextBtn"  style="margin-top: 10px">提交订单>></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer  style="margin-top: 100px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="primary-button">
+                    <a href="#" class="scroll-top">Back To Top</a>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <p>Copyright &copy; 2018.Company name All rights reserved.<a target="_blank" href="http://www.sucaihuo.com/"></a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    添加乘机人
+                </h4>
+            </div>
+            <div class="modal-body">
+
+                <form action="/addPassenger" id="addPassenger" method="post">
+                    &nbsp;<i class="fa fa-user" aria-hidden="true"></i>&nbsp;
+                    <input type="text" name="passengerName" placeholder="乘机人" required><br>
+                    <br>
+                    <i class="fa fa-address-card" aria-hidden="true"></i>
+                    <input type="text" name="passengerId" placeholder="身份证号" required>
+                </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('addPassenger').submit()">
+                    确认
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="js/vendor/jquery-1.11.2.min.js"></script>
+
+<script src="js/vendor/bootstrap.min.js"></script>
+
+<script src="js/datepicker.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+    window.onload= function afterSubmit() {
+        window.location.href = "#weather";
+    }
+</script>
+</body>
+</html>

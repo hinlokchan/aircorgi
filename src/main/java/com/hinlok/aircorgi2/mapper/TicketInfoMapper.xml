@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hinlok.aircorgi2.mapper.TicketInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hinlok.aircorgi2.model.TicketInfo">
+    <id column="ticket_id" jdbcType="VARCHAR" property="ticketId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="dep_date" jdbcType="VARCHAR" property="depDate" />
+    <result column="seat_type" jdbcType="VARCHAR" property="seatType" />
+    <result column="passenger_id" jdbcType="VARCHAR" property="passengerId" />
+    <result column="passenger_name" jdbcType="VARCHAR" property="passengerName" />
+    <result column="ticket_status" jdbcType="INTEGER" property="ticketStatus" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hinlok.aircorgi2.model.TicketInfo">
+    <result column="flight_num" jdbcType="VARBINARY" property="flightNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ticket_id, order_id, dep_date, seat_type, passenger_id, passenger_name ,ticket_status
+  </sql>
+  <sql id="Blob_Column_List">
+    flight_num
+  </sql>
+
+  <delete id="deleteByOrderId">
+    delete from
+    ticket_info
+    where
+    order_id=#{orderId}
+  </delete>
+
+  <select id="selectAllTicketByOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    ticket_info
+    where order_id=#{orderId}
+  </select>
+
+  <insert id="insertTicket">
+    insert into ticket_info (ticket_id, order_id, dep_date,
+      seat_type, passenger_id, flight_num, passenger_name,ticket_status
+      )
+    values (#{ticketInfo.ticketId,jdbcType=VARCHAR}, #{ticketInfo.orderId,jdbcType=VARCHAR}, #{ticketInfo.depDate,jdbcType=VARCHAR},
+      #{ticketInfo.seatType,jdbcType=VARCHAR}, #{ticketInfo.passengerId,jdbcType=VARCHAR}, #{ticketInfo.flightNum,jdbcType=VARCHAR}
+      , #{ticketInfo.passengerName,jdbcType=VARCHAR},#{ticketInfo.ticketStatus,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <update id="updateTicketStatus">
+    update
+    ticket_info
+    set
+    ticket_status = #{ticketStatus}
+    where
+    ticket_id = #{ticketId}
+  </update>
+
+  <update id="updateTicketStatusByOrderId">
+    update
+    ticket_info
+    set
+    ticket_status = #{ticketStatus}
+    where
+    order_id=#{orderId}
+  </update>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from ticket_info
+    where ticket_id = #{ticketId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ticket_info
+    where ticket_id = #{ticketId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hinlok.aircorgi2.model.TicketInfo">
+    insert into ticket_info (ticket_id, order_id, dep_date, 
+      seat_type, passenger_id, flight_num
+      )
+    values (#{ticketId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{depDate,jdbcType=DATE}, 
+      #{seatType,jdbcType=VARCHAR}, #{passengerId,jdbcType=INTEGER}, #{flightNum,jdbcType=VARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hinlok.aircorgi2.model.TicketInfo">
+    insert into ticket_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ticketId != null">
+        ticket_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="depDate != null">
+        dep_date,
+      </if>
+      <if test="seatType != null">
+        seat_type,
+      </if>
+      <if test="passengerId != null">
+        passenger_id,
+      </if>
+      <if test="flightNum != null">
+        flight_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ticketId != null">
+        #{ticketId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="depDate != null">
+        #{depDate,jdbcType=DATE},
+      </if>
+      <if test="seatType != null">
+        #{seatType,jdbcType=VARCHAR},
+      </if>
+      <if test="passengerId != null">
+        #{passengerId,jdbcType=INTEGER},
+      </if>
+      <if test="flightNum != null">
+        #{flightNum,jdbcType=VARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hinlok.aircorgi2.model.TicketInfo">
+    update ticket_info
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="depDate != null">
+        dep_date = #{depDate,jdbcType=DATE},
+      </if>
+      <if test="seatType != null">
+        seat_type = #{seatType,jdbcType=VARCHAR},
+      </if>
+      <if test="passengerId != null">
+        passenger_id = #{passengerId,jdbcType=INTEGER},
+      </if>
+      <if test="flightNum != null">
+        flight_num = #{flightNum,jdbcType=VARBINARY},
+      </if>
+    </set>
+    where ticket_id = #{ticketId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hinlok.aircorgi2.model.TicketInfo">
+    update ticket_info
+    set order_id = #{orderId,jdbcType=INTEGER},
+      dep_date = #{depDate,jdbcType=DATE},
+      seat_type = #{seatType,jdbcType=VARCHAR},
+      passenger_id = #{passengerId,jdbcType=INTEGER},
+      flight_num = #{flightNum,jdbcType=VARBINARY}
+    where ticket_id = #{ticketId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hinlok.aircorgi2.model.TicketInfo">
+    update ticket_info
+    set order_id = #{orderId,jdbcType=INTEGER},
+      dep_date = #{depDate,jdbcType=DATE},
+      seat_type = #{seatType,jdbcType=VARCHAR},
+      passenger_id = #{passengerId,jdbcType=INTEGER}
+    where ticket_id = #{ticketId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hinlok.aircorgi2.mapper.FlightInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hinlok.aircorgi2.model.FlightInfo">
+    <result column="flight_num" jdbcType="VARCHAR" property="flightNum" />
+    <result column="dep_date" jdbcType="VARCHAR" property="depDate" />
+    <result column="departure" jdbcType="VARCHAR" property="departure" />
+    <result column="destination" jdbcType="VARCHAR" property="destination" />
+    <result column="dep_time" jdbcType="VARCHAR" property="depTime" />
+    <result column="arr_time" jdbcType="VARCHAR" property="arrTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    flight_num, dep_date, departure,
+      destination, dep_time, arr_time
+  </sql>
+
+  <select id="selectFlightInfoByFlightNumDepDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    flight_info
+    where
+    flight_num=#{flightNum}
+    and
+    dep_date=#{depDate}
+  </select>
+
+  <select id="selectFlightByDesDepDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    flight_info
+    where
+    departure=#{departure}
+    AND
+    destination=#{destination}
+    AND
+    DATE_FORMAT( dep_date, '%Y%m%d' )=DATE_FORMAT( #{depDate}, '%Y%m%d' )
+  </select>
+
+  <select id="selectDepByFlight" resultType="java.lang.String">
+    SELECT
+    DISTINCT departure
+    FROM
+    flight_info
+    WHERE
+    flight_num=#{flightNum}
+  </select>
+
+  <select id="selectDesByFlight" resultType="java.lang.String">
+    SELECT
+    DISTINCT destination
+    FROM
+    flight_info
+    WHERE
+    flight_num=#{flightNum}
+  </select>
+
+  <insert id="insert" parameterType="com.hinlok.aircorgi2.model.FlightInfo">
+    insert into flight_info (flight_num, dep_date, departure, 
+      destination, dep_time, arr_time
+      )
+    values (#{flightNum,jdbcType=VARCHAR}, #{depDate,jdbcType=DATE}, #{departure,jdbcType=VARCHAR}, 
+      #{destination,jdbcType=VARCHAR}, #{depTime,jdbcType=VARCHAR}, #{arrTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hinlok.aircorgi2.model.FlightInfo">
+    insert into flight_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flightNum != null">
+        flight_num,
+      </if>
+      <if test="depDate != null">
+        dep_date,
+      </if>
+      <if test="departure != null">
+        departure,
+      </if>
+      <if test="destination != null">
+        destination,
+      </if>
+      <if test="depTime != null">
+        dep_time,
+      </if>
+      <if test="arrTime != null">
+        arr_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flightNum != null">
+        #{flightNum,jdbcType=VARCHAR},
+      </if>
+      <if test="depDate != null">
+        #{depDate,jdbcType=DATE},
+      </if>
+      <if test="departure != null">
+        #{departure,jdbcType=VARCHAR},
+      </if>
+      <if test="destination != null">
+        #{destination,jdbcType=VARCHAR},
+      </if>
+      <if test="depTime != null">
+        #{depTime,jdbcType=VARCHAR},
+      </if>
+      <if test="arrTime != null">
+        #{arrTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

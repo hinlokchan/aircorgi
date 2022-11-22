@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hinlok.aircorgi2.mapper.PriceInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hinlok.aircorgi2.model.PriceInfo">
+    <result column="flight_num" jdbcType="VARCHAR" property="flightNum" />
+    <result column="dep_date" jdbcType="VARCHAR" property="depDate" />
+    <result column="fclass_price" jdbcType="INTEGER" property="fclassPrice" />
+    <result column="bclass_price" jdbcType="INTEGER" property="bclassPrice" />
+    <result column="eclass_price" jdbcType="INTEGER" property="eclassPrice" />
+  </resultMap>
+
+  <select id="selectPriceBySeatType" resultType="java.lang.Integer">
+    select
+    ${orderInfo.seatType+'_price'}
+    from
+    price_info
+    where
+    flight_num='${orderInfo.flightNum}'
+    and
+    dep_date='${orderInfo.depDate}'
+  </select>
+
+  <insert id="insert" parameterType="com.hinlok.aircorgi2.model.PriceInfo">
+    insert into price_info (flight_num, dep_date, fclass_price, 
+      bclass_price, eclass_price)
+    values (#{flightNum,jdbcType=VARCHAR}, #{depDate,jdbcType=DATE}, #{fclassPrice,jdbcType=INTEGER}, 
+      #{bclassPrice,jdbcType=INTEGER}, #{eclassPrice,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hinlok.aircorgi2.model.PriceInfo">
+    insert into price_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flightNum != null">
+        flight_num,
+      </if>
+      <if test="depDate != null">
+        dep_date,
+      </if>
+      <if test="fclassPrice != null">
+        fclass_price,
+      </if>
+      <if test="bclassPrice != null">
+        bclass_price,
+      </if>
+      <if test="eclassPrice != null">
+        eclass_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flightNum != null">
+        #{flightNum,jdbcType=VARCHAR},
+      </if>
+      <if test="depDate != null">
+        #{depDate,jdbcType=DATE},
+      </if>
+      <if test="fclassPrice != null">
+        #{fclassPrice,jdbcType=INTEGER},
+      </if>
+      <if test="bclassPrice != null">
+        #{bclassPrice,jdbcType=INTEGER},
+      </if>
+      <if test="eclassPrice != null">
+        #{eclassPrice,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

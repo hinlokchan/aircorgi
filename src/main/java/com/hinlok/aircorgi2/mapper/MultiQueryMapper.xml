@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hinlok.aircorgi2.mapper.MultiQueryMapper">
+  <resultMap id="BaseResultMap" type="com.hinlok.aircorgi2.model.MultiQuery">
+    <result column="flight_num" jdbcType="VARCHAR" property="flightNum" />
+    <result column="DATE_FORMAT( flight_info.dep_date, '%Y-%m-%d' )" jdbcType="VARCHAR" property="depDate" />
+    <result column="fclass_price" jdbcType="VARCHAR" property="fclassPrice" />
+    <result column="bclass_price" jdbcType="VARCHAR" property="bclassPrice" />
+    <result column="eclass_price" jdbcType="VARCHAR" property="eclassPrice" />
+    <result column="dep_time" jdbcType="VARCHAR" property="depTime" />
+    <result column="arr_time" jdbcType="VARCHAR" property="arrTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    flight_num, dep_date, fclass_price,
+      bclass_price, eclass_price, dep_time,
+      arr_time
+  </sql>
+
+  <select id="flightDetail" resultMap="BaseResultMap">
+    SELECT
+    flight_info.flight_num,DATE_FORMAT( flight_info.dep_date, '%Y-%m-%d' ),flight_info.dep_time,flight_info.arr_time,
+    price_info.fclass_price,price_info.bclass_price,price_info.eclass_price
+    FROM
+    flight_info JOIN price_info
+    ON
+    DATE_FORMAT( flight_info.dep_date, '%Y%m%d' ) = DATE_FORMAT( price_info.dep_date, '%Y%m%d' )
+	AND flight_info.flight_num = price_info.flight_num
+	WHERE
+    flight_info.flight_num=#{flightNum}
+    AND
+    flight_info.dep_date=#{depDate}
+
+  </select>
+
+  <insert id="insert" parameterType="com.hinlok.aircorgi2.model.MultiQuery">
+    insert into multi_query (flight_num, dep_date, fclass_price, 
+      bclass_price, eclass_price, dep_time, 
+      arr_time)
+    values (#{flightNum,jdbcType=VARCHAR}, #{depDate,jdbcType=DATE}, #{fclassPrice,jdbcType=VARCHAR}, 
+      #{bclassPrice,jdbcType=VARCHAR}, #{eclassPrice,jdbcType=VARCHAR}, #{depTime,jdbcType=VARCHAR}, 
+      #{arrTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hinlok.aircorgi2.model.MultiQuery">
+    insert into multi_query
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flightNum != null">
+        flight_num,
+      </if>
+      <if test="depDate != null">
+        dep_date,
+      </if>
+      <if test="fclassPrice != null">
+        fclass_price,
+      </if>
+      <if test="bclassPrice != null">
+        bclass_price,
+      </if>
+      <if test="eclassPrice != null">
+        eclass_price,
+      </if>
+      <if test="depTime != null">
+        dep_time,
+      </if>
+      <if test="arrTime != null">
+        arr_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flightNum != null">
+        #{flightNum,jdbcType=VARCHAR},
+      </if>
+      <if test="depDate != null">
+        #{depDate,jdbcType=DATE},
+      </if>
+      <if test="fclassPrice != null">
+        #{fclassPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="bclassPrice != null">
+        #{bclassPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="eclassPrice != null">
+        #{eclassPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="depTime != null">
+        #{depTime,jdbcType=VARCHAR},
+      </if>
+      <if test="arrTime != null">
+        #{arrTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>
